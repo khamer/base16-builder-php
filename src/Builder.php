@@ -39,7 +39,6 @@ class Builder
 	 */
 	public function updateSources($url_list, $path)
 	{
-		
 		foreach ($url_list as $name => $url) {
 			echo "\n-- $path/$name\n";
 			if (file_exists("$path/$name")) {
@@ -103,8 +102,10 @@ class Builder
 	 */
 	public function writeFile($file_path, $file_name, $contents)
 	{
-		if (!is_dir($file_path)) mkdir($file_path);
-		file_put_contents($file_path . '/' . $file_name, $contents);
+		$path = $file_path . '/' . $file_name;
+		$dir  = dirname($path);
+		if (!is_dir($dir)) mkdir($dir, 0777, true);
+		file_put_contents($path, $contents);
 	}
 
 	/**
