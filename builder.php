@@ -81,6 +81,7 @@ switch (@$argv[1]) {
 
 
 		// Loop templates repositories
+		$rendered_templates = [];
 		foreach ($tpl_list as $tpl_name => $tpl_url) {
 
 			$tpl_confs = Builder::parse(
@@ -110,7 +111,6 @@ switch (@$argv[1]) {
 							basename($sch_file, '.yaml'));
 						$tpl_data['scheme-slug'] = $sch_slug;
 						
-
 						$file_name = 'base16-' .  $sch_slug
 							. $tpl_conf['extension'];
 
@@ -121,10 +121,30 @@ switch (@$argv[1]) {
 
 						$builder->writeFile($file_path, $file_name, $render);
 
-						echo "Built $file_name\n";
+						$full_file = $file_path . '/' . $file_name;
+
+						// Store a list of templates that have been 
+						// overwritten. This may happen if scheme repos house
+						// schemes files with the same names
+						$overwritten_templates = [];
+						if (in_array($full_file, $rendered_templates)) {
+							$overwritten_templates[] = $full_file;
+						}
+
+						// Store a list of templates generated for this 
+						// session
+						$rendered_templates[] = $full_file;
+
+						echo "Built $full_file\n";
 					}
 				}
 			}
 		}
+
+		// Warn if a template has been overwritten
+		foreach ($overwritten_templates as $overwritten_template) {
+			echo "\nWarning: $overwritten_template was overwritten.\n";
+		}
+
 		break;
 }

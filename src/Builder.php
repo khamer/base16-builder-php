@@ -64,8 +64,8 @@ class Builder
 	 */
 	public function buildTemplateData($scheme_data)
 	{
-		$vars['scheme-name'] = $scheme_data["scheme"];
-		$vars['scheme-author'] = $scheme_data["author"];
+		$vars['scheme-name'] = $scheme_data['scheme'];
+		$vars['scheme-author'] = $scheme_data['author'];
 
 		$bases = array('00', '01', '02', '03', '04', '05', '06', '07', '08',
 			'09', '0A', '0B', '0C', '0D', '0E', '0F');
@@ -75,6 +75,8 @@ class Builder
 			$color = new Color($scheme_data[$base_key]);
 
 			$vars[$base_key . '-hex'] = $color->getHex();
+			$vars[$base_key . '-hex-bgr'] = substr($color->getHex(), 4, 2) . 
+				substr($color->getHex(), 2, 2) . substr($color->getHex(), 0, 2);
 			$vars[$base_key . '-hex-r'] = substr($color->getHex(), 0, 2);
 			$vars[$base_key . '-hex-g'] = substr($color->getHex(), 2, 2);
 			$vars[$base_key . '-hex-b'] = substr($color->getHex(), 4, 2);
